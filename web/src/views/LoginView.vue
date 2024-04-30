@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref, reactive} from 'vue';
 import type {FormInstance, FormRules} from 'element-plus'
+import axios from 'axios'
 
 const bg = [
   "/src/assets/images/download/共同协同.png",
@@ -49,6 +50,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   })
 }
+
+// const date = new Date();
+// date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+// const expires = `expires=${date.toUTCString()}`;
+// console.log(expires)
+// document.cookie = `token=123;${expires};path=/`;
+
+axios.get("/").then((res) => {
+  console.log(res)
+})
+
+console.log(import.meta.env)
 
 </script>
 

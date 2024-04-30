@@ -8,23 +8,23 @@ const img_list = ref(
     [
       {
         time: "2024/4/26",
-        title: "第一次",
+        title: "你🐉🐎",
         list: [
-          "https://th.wallhaven.cc/small/3l/3lepy9.jpg",
-          "https://th.wallhaven.cc/small/9d/9dyeex.jpg",
-          "https://th.wallhaven.cc/small/yx/yxrkm7.jpg"
+          "https://w.wallhaven.cc/full/l8/wallhaven-l87pjy.jpg",
+          "https://w.wallhaven.cc/full/5g/wallhaven-5g8335.jpg",
+          "https://w.wallhaven.cc/full/m3/wallhaven-m3mekk.jpg"
         ]
       },
       {
         time: "2024/3/1",
-        title: "第一次",
+        title: "🐕‍🦺📣?",
         list: [
-          "https://th.wallhaven.cc/small/1p/1pmoy3.jpg",
-          "https://th.wallhaven.cc/small/m3/m3mmq9.jpg",
-          "https://th.wallhaven.cc/small/m3/m3m5vy.jpg",
-          "https://th.wallhaven.cc/small/qz/qz8pqd.jpg",
-          "https://th.wallhaven.cc/small/1p/1pmo7g.jpg",
-          "https://th.wallhaven.cc/small/zy/zyrv6g.jpg"
+          "https://w.wallhaven.cc/full/2y/wallhaven-2y56l9.jpg",
+          "https://w.wallhaven.cc/full/x6/wallhaven-x62g3o.jpg",
+          "https://w.wallhaven.cc/full/m3/wallhaven-m3m7y1.png",
+          "https://w.wallhaven.cc/full/kx/wallhaven-kx6ow1.png",
+          "https://w.wallhaven.cc/full/p9/wallhaven-p9xx39.jpg",
+          "https://w.wallhaven.cc/full/85/wallhaven-85117k.jpg"
         ]
       }
     ]
@@ -47,15 +47,17 @@ onMounted(() => {
       <el-timeline style="max-width: 1000px">
         <el-timeline-item v-for="item in img_list" :timestamp="item.time" placement="top">
           <el-card
-              :style="{width:`${(item.list.length > 5) ? 1080:(clientWidth > 500 ?item.list.length * 200:200) + (clientWidth > 500 ? ((item.list.length-1) * 10) + 40: 40)}px`}">
+              style="max-width: 1080px;"
+              :style="{width:`${(clientWidth > 500 ?item.list.length * 200:200) + (clientWidth > 500 ? ((item.list.length-1) * 10) + 40: 40)}px`}">
             <div class="title">
               {{ item.title }}
             </div>
             <div class="img_list">
               <el-image
+                  fit="cover"
                   :preview-src-list="item.list"
                   :initial-index="idx"
-                  style="width: 200px" v-for="(img,idx) in item.list" :key="img" :src="img" lazy>
+                  style="width: 200px;height: 150px" v-for="(img,idx) in item.list" :key="img" :src="img" lazy>
 
               </el-image>
             </div>
@@ -78,6 +80,7 @@ onMounted(() => {
 
 .title {
   padding-bottom: 10px;
+  font-size: 16px;
 }
 
 :deep(.el-timeline-item__timestamp) {

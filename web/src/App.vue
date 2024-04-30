@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import {RouterLink, RouterView, useRouter} from 'vue-router'
-import Header from "@/components/Header.vue";
-import {onMounted} from "vue";
 
 const router = useRouter();
 router.beforeEach((to, from, next) => {
