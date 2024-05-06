@@ -27,54 +27,79 @@ onMounted(() => {
 </script>
 
 <template>
-  <Header></Header>
-  <main>
-    <div class="container">
-      <div class="nav_left">
-        <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
-          <home theme="outline" size="30" fill="#000000"/>
-          <span class="select">首页</span>
-        </div>
-        <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">
-          <timeline theme="outline" size="30" fill="#000000"/>
-          <span class="select">时间线</span>
-        </div>
-        <div class="nav_item" @click="toLink('/chat')" :class="{is_active:current_page==='chat'}">
-          <communication theme="outline" size="30" fill="#000000"/>
-          <span class="select">聊天</span>
-        </div>
-      </div>
-      <div class="main-content">
-        <!--        <el-scrollbar max-height="100vh">-->
-        <RouterView/>
-        <!--        </el-scrollbar>-->
-      </div>
-    </div>
-    <div class="nav_bottom">
-      <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
-        <home theme="outline" size="30" fill="#000000"/>
-      </div>
-      <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">
-        <timeline theme="outline" size="30" fill="#000000"/>
-      </div>
-      <div class="nav_item" @click="toLink('/chats')" :class="{is_active:current_page==='chat'}">
-        <communication theme="outline" size="30" fill="#000000"/>
-      </div>
-      <div class="nav_item" @click="toLink('/userinfo')" :class="{is_active:current_page==='userinfo'}">
-        <user theme="outline" size="30" fill="#000000"/>
-      </div>
-    </div>
+  <div class="dcq">
+    <el-container>
+      <el-aside width="10vw">
+        <el-card shadow="always" class="nav_card">
 
-  </main>
+          <div class="nav_left">
+            <div class="logo">
+              <div>L S</div>
+              <div>LoveStory</div>
+            </div>
+            <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
+              <home theme="outline" size="30" fill="#000000"/>
+              <span class="select">首页</span>
+            </div>
+            <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">
+              <timeline theme="outline" size="30" fill="#000000"/>
+              <span class="select">时间线</span>
+            </div>
+            <div class="nav_item" @click="toLink('/chat')" :class="{is_active:current_page==='chat'}">
+              <communication theme="outline" size="30" fill="#000000"/>
+              <span class="select">聊天</span>
+            </div>
+          </div>
+        </el-card>
+      </el-aside>
+      <el-container>
+        <el-header>
+          <Header></Header>
+        </el-header>
+        <el-main>
+          <el-scrollbar>
+            <RouterView/>
+          </el-scrollbar>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
+
+
+<!--  <div class="nav_bottom">-->
+<!--    <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">-->
+<!--      <home theme="outline" size="30" fill="#000000"/>-->
+<!--    </div>-->
+<!--    <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">-->
+<!--      <timeline theme="outline" size="30" fill="#000000"/>-->
+<!--    </div>-->
+<!--    <div class="nav_item" @click="toLink('/chats')" :class="{is_active:current_page==='chat'}">-->
+<!--      <communication theme="outline" size="30" fill="#000000"/>-->
+<!--    </div>-->
+<!--    <div class="nav_item" @click="toLink('/userinfo')" :class="{is_active:current_page==='userinfo'}">-->
+<!--      <user theme="outline" size="30" fill="#000000"/>-->
+<!--    </div>-->
+<!--  </div>-->
+
 </template>
 <style scoped>
+.dcq{
+  width: 90vw;
+  margin: 0 auto;
+}
+:deep(main){
+  width: 90%;
+}
 .container {
   display: flex;
   margin-top: 25px;
 }
 
+.nav_card {
+  border-radius: 30px;
+}
+
 .nav_left {
-  width: 300px;
 }
 
 .nav_bottom {
@@ -104,7 +129,6 @@ onMounted(() => {
   cursor: pointer;
   border-radius: 50px;
   padding: 10px 20px;
-  width: 200px;
 }
 
 .select {
@@ -117,7 +141,7 @@ onMounted(() => {
 }
 
 @media (max-width: 700px) {
-  .nav_left {
+  .nav_card {
     display: none;
   }
 

@@ -6,31 +6,28 @@ const input = ref("")
 </script>
 
 <template>
-  <el-affix>
-    <div class="nav-bg">
-      <div class="nav-bar">
-        <div class="logo">
-          <div>L S</div>
-          <div>LoveStory</div>
-        </div>
-        <div class="search">
-          <el-input v-model="input" size="large" :suffix-icon="Search" placeholder="输入查询内容"/>
-        </div>
-        <div class="user">
-          <el-dropdown>
-            <el-avatar style="outline: none"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
+  <div class="nav-bg">
+    <div class="nav-bar">
+      <div class="logo">
+        <div>L S</div>
+        <div>LoveStory</div>
+      </div>
+      <div class="search">
+        <el-input v-model="input" size="large" :suffix-icon="Search" placeholder="输入查询内容"/>
+      </div>
+      <div class="user">
+        <el-dropdown>
+          <el-avatar style="outline: none"
+                     src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
-  </el-affix>
-
+  </div>
 </template>
 
 <style scoped>
@@ -47,7 +44,6 @@ const input = ref("")
 
 .nav-bg {
   background: #fff;
-  padding: 0 60px;
 }
 
 .nav-bar {
@@ -56,11 +52,6 @@ const input = ref("")
   justify-content: space-between;
 }
 
-.search {
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%);
-}
 
 :deep(.el-input__wrapper) {
   width: 400px;

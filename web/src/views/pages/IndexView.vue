@@ -123,7 +123,7 @@ const compute_img = () => {
 }
 compute_img()
 
-const preview = (data) => {
+const preview = (data: any) => {
   console.log(data)
   let cw = document.body.clientWidth
   if (cw < 700) {
@@ -146,11 +146,10 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <el-scrollbar max-height="90vh">
     <div class="img_list">
       <div class="item-col" v-for="item in show_img_list" :key="item">
         <el-card class="item" v-for="img in item" :key="img" @click="preview(img)">
-          <el-image fit="cover" style="width: 100%" :style="{height:`${img.height}00px`}"
+          <el-image fit="cover" style="width: 100%;min-height: 100px" :style="{height:`${img.height}00px`}"
                     :src="img.src" lazy>
             <template #placeholder>
               <el-skeleton animated style="width: 100%">
@@ -174,28 +173,29 @@ onBeforeMount(() => {
       </div>
 
     </div>
-  </el-scrollbar>
-  <el-dialog
-      v-model="show_dialog"
-      width="900"
-      align-center
-      :close-icon="CloseOne"
-  >
-    <div class="detail">
-      <el-image
-          fit="cover"
-          :initial-index="0"
-          :preview-src-list="[current_data.src]"
-          :src="current_data.src"/>
-      <div>
-        <div class="desc_detail">
-          <div class="desc">
-            {{ current_data.desc }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </el-dialog>
+<!--  <el-dialog-->
+<!--      v-model="show_dialog"-->
+<!--      width="900"-->
+<!--      align-center-->
+<!--      :close-icon="CloseOne"-->
+<!--      :show-close="false"-->
+<!--      style="border-radius: 20px"-->
+<!--  >-->
+<!--    <div class="detail">-->
+<!--      <el-image-->
+<!--          fit="cover"-->
+<!--          :initial-index="0"-->
+<!--          :preview-src-list="[current_data.src]"-->
+<!--          :src="current_data.src"/>-->
+<!--      <div>-->
+<!--        <div class="desc_detail">-->
+<!--          <div class="desc">-->
+<!--            {{ current_data.desc }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </el-dialog>-->
 
 </template>
 
@@ -208,7 +208,7 @@ onBeforeMount(() => {
 }
 
 .item {
-  min-height: 400px;
+  border-radius: 30px;
 }
 
 .item-col {
@@ -220,7 +220,6 @@ onBeforeMount(() => {
 
 :deep(.el-card__body) {
   padding: 0;
-  width: 100%;
 }
 
 :deep(.el-image) {
@@ -229,6 +228,7 @@ onBeforeMount(() => {
 
 .desc {
   padding: 10px;
+  height: 70px;
 }
 
 .image-slot {
