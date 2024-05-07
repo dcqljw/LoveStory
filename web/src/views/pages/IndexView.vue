@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, type Ref, ref} from "vue";
 import {useRouter} from "vue-router";
 import {ErrorPicture, CloseOne} from '@icon-park/vue-next'
 
@@ -10,7 +10,14 @@ const clientWidth = ref(0)
 const col = ref(5)
 const start_idx_end = ref(4)
 
-const img_list = ref([
+interface img_list {
+  src: string
+  desc: string
+  h: number
+}
+
+// const img_list: Ref<{ src: string     desc: string     h: number }[]>
+const img_list = ref<img_list[]>([
   {
     'src': 'https://w.wallhaven.cc/full/l8/wallhaven-l87pjy.jpg',
     'desc': 'General 3840x1921 Helldivers 2 fan art robot space battle video games PlayStation video game art soldier Democracy video game characters animatronic spaceship boys with guns',
@@ -149,7 +156,7 @@ onBeforeMount(() => {
     <div class="img_list">
       <div class="item-col" v-for="item in show_img_list" :key="item">
         <el-card class="item" v-for="img in item" :key="img" @click="preview(img)">
-          <el-image fit="cover" style="width: 100%;min-height: 100px" :style="{height:`${img.height}00px`}"
+          <el-image fit="cover" style="width: 100%" :style="{height:`${img.height}00px`}"
                     :src="img.src" lazy>
             <template #placeholder>
               <el-skeleton animated style="width: 100%">
@@ -173,29 +180,27 @@ onBeforeMount(() => {
       </div>
 
     </div>
-<!--  <el-dialog-->
-<!--      v-model="show_dialog"-->
-<!--      width="900"-->
-<!--      align-center-->
-<!--      :close-icon="CloseOne"-->
-<!--      :show-close="false"-->
-<!--      style="border-radius: 20px"-->
-<!--  >-->
-<!--    <div class="detail">-->
-<!--      <el-image-->
-<!--          fit="cover"-->
-<!--          :initial-index="0"-->
-<!--          :preview-src-list="[current_data.src]"-->
-<!--          :src="current_data.src"/>-->
-<!--      <div>-->
-<!--        <div class="desc_detail">-->
-<!--          <div class="desc">-->
-<!--            {{ current_data.desc }}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </el-dialog>-->
+  <el-dialog
+      v-model="show_dialog"
+      width="900"
+      align-center
+      :close-icon="CloseOne"
+  >
+    <div class="detail">
+      <el-image
+          fit="cover"
+          :initial-index="0"
+          :preview-src-list="[current_data.src]"
+          :src="current_data.src"/>
+      <div>
+        <div class="desc_detail">
+          <div class="desc">
+            {{ current_data.desc }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </el-dialog>
 
 </template>
 
@@ -208,7 +213,7 @@ onBeforeMount(() => {
 }
 
 .item {
-  border-radius: 30px;
+  min-height: 400px;
 }
 
 .item-col {
@@ -220,6 +225,7 @@ onBeforeMount(() => {
 
 :deep(.el-card__body) {
   padding: 0;
+  width: 100%;
 }
 
 :deep(.el-image) {
@@ -228,7 +234,6 @@ onBeforeMount(() => {
 
 .desc {
   padding: 10px;
-  height: 70px;
 }
 
 .image-slot {

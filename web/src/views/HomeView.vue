@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from "@/components/Header.vue";
-import {Home, Timeline, Communication, User} from '@icon-park/vue-next'
+import {Home, Timeline, Communication, User, SettingOne} from '@icon-park/vue-next'
 
 import {useRouter, useRoute} from "vue-router";
 import {onMounted, ref, computed} from "vue";
@@ -29,7 +29,7 @@ onMounted(() => {
 <template>
   <div class="dcq">
     <el-container>
-      <el-aside width="10vw">
+      <el-aside width="14vw" style="padding: 14px 0">
         <el-card shadow="always" class="nav_card">
 
           <div class="nav_left">
@@ -49,15 +49,19 @@ onMounted(() => {
               <communication theme="outline" size="30" fill="#000000"/>
               <span class="select">聊天</span>
             </div>
+            <div class="nav_item" @click="toLink('/setting')" :class="{is_active:current_page==='chat'}">
+              <setting-one theme="outline" size="30" fill="#000000"/>
+              <span class="select">设置</span>
+            </div>
           </div>
         </el-card>
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header style="height: 70px">
           <Header></Header>
         </el-header>
-        <el-main>
-          <el-scrollbar>
+        <el-main style="height: calc(100vh - 70px)">
+          <el-scrollbar style="height: 100%">
             <RouterView/>
           </el-scrollbar>
         </el-main>
@@ -66,37 +70,46 @@ onMounted(() => {
   </div>
 
 
-<!--  <div class="nav_bottom">-->
-<!--    <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">-->
-<!--      <home theme="outline" size="30" fill="#000000"/>-->
-<!--    </div>-->
-<!--    <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">-->
-<!--      <timeline theme="outline" size="30" fill="#000000"/>-->
-<!--    </div>-->
-<!--    <div class="nav_item" @click="toLink('/chats')" :class="{is_active:current_page==='chat'}">-->
-<!--      <communication theme="outline" size="30" fill="#000000"/>-->
-<!--    </div>-->
-<!--    <div class="nav_item" @click="toLink('/userinfo')" :class="{is_active:current_page==='userinfo'}">-->
-<!--      <user theme="outline" size="30" fill="#000000"/>-->
-<!--    </div>-->
-<!--  </div>-->
+  <!--  <div class="nav_bottom">-->
+  <!--    <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">-->
+  <!--      <home theme="outline" size="30" fill="#000000"/>-->
+  <!--    </div>-->
+  <!--    <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">-->
+  <!--      <timeline theme="outline" size="30" fill="#000000"/>-->
+  <!--    </div>-->
+  <!--    <div class="nav_item" @click="toLink('/chats')" :class="{is_active:current_page==='chat'}">-->
+  <!--      <communication theme="outline" size="30" fill="#000000"/>-->
+  <!--    </div>-->
+  <!--    <div class="nav_item" @click="toLink('/userinfo')" :class="{is_active:current_page==='userinfo'}">-->
+  <!--      <user theme="outline" size="30" fill="#000000"/>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
 </template>
 <style scoped>
-.dcq{
+
+.dcq {
   width: 90vw;
   margin: 0 auto;
 }
-:deep(main){
-  width: 90%;
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
 }
+
+:deep(main) {
+  width: 100%;
+}
+
 .container {
   display: flex;
   margin-top: 25px;
 }
 
 .nav_card {
-  border-radius: 30px;
+  height: 99%;
 }
 
 .nav_left {

@@ -42,32 +42,30 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-scrollbar max-height="70vh">
-    <div>
-      <el-timeline style="max-width: 1000px">
-        <el-timeline-item v-for="item in img_list" :timestamp="item.time" placement="top">
-          <el-card
-              style="max-width: 1080px;"
-              :style="{width:`${(clientWidth > 500 ?item.list.length * 200:200) + (clientWidth > 500 ? ((item.list.length-1) * 10) + 40: 40)}px`}">
-            <div class="title">
-              {{ item.title }}
-            </div>
-            <div class="img_list">
-              <el-image
-                  fit="cover"
-                  :preview-src-list="item.list"
-                  :initial-index="idx"
-                  style="width: 200px;height: 150px" v-for="(img,idx) in item.list" :key="img" :src="img" lazy>
+  <div>
+    <el-timeline style="max-width: 1000px">
+      <el-timeline-item v-for="item in img_list" :timestamp="item.time" placement="top">
+        <el-card
+            style="max-width: 1080px;"
+            :style="{width:`${(clientWidth > 500 ?item.list.length * 200:200) + (clientWidth > 500 ? ((item.list.length-1) * 10) + 40: 40)}px`}">
+          <div class="title">
+            {{ item.title }}
+          </div>
+          <div class="img_list">
+            <el-image
+                fit="cover"
+                :preview-src-list="item.list"
+                :initial-index="idx"
+                style="width: 200px;height: 150px" v-for="(img,idx) in item.list" :key="img" :src="img" lazy>
 
-              </el-image>
-            </div>
+            </el-image>
+          </div>
 
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
-    </div>
-    <el-backtop></el-backtop>
-  </el-scrollbar>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
+  </div>
+  <el-backtop></el-backtop>
 </template>
 
 <style scoped>

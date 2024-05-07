@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {Search} from '@element-plus/icons-vue'
+import {HamburgerButton} from "@icon-park/vue-next";
+import {onMounted, ref} from "vue";
+import {useRouter} from "vue-router"
 
-const input = ref("")
+const router = useRouter();
+const current_name = ref("首页")
+
+router.beforeEach((to, from, next) => {
+  current_name.value = to.meta.cn_name
+  next()
+})
+
+onMounted(() => {
+  console.log("Header")
+})
+
 </script>
 
 <template>
   <div class="nav-bg">
     <div class="nav-bar">
-      <div class="logo">
-        <div>L S</div>
-        <div>LoveStory</div>
-      </div>
-      <div class="search">
-        <el-input v-model="input" size="large" :suffix-icon="Search" placeholder="输入查询内容"/>
+      <div class="current_title">
+        <hamburger-button theme="outline" size="32" fill="#8d8d8d"/>
+        <div>{{ current_name }}</div>
       </div>
       <div class="user">
         <el-dropdown>
@@ -31,15 +40,18 @@ const input = ref("")
 </template>
 
 <style scoped>
-.logo > div:nth-child(1) {
-  font-size: 28px;
-  font-family: "JetBrains Mono";
+
+.current_title {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  justify-content: space-between;
+  width: 100px;
 }
 
-.logo > div:nth-child(2) {
-  font-size: 16px;
-  font-family: "MV Boli";
-  color: #852fff;
+
+.nav-bar, .nav-bg {
+  height: 100%;
 }
 
 .nav-bg {
