@@ -22,13 +22,3 @@ class ResponseSchema(BaseModel):
         """
         self.msg = CustomStatus.get(self.code, "未知错误")
         return self
-
-    # @model_validator(mode="after")
-    # def test(self):
-    #     print("==================")
-    #     print(self.data)
-    #     print(type(self.data))
-    #     if isinstance(self.data, dict):
-    #         return self
-    #     self.data = self.data._json()
-    #     return self
