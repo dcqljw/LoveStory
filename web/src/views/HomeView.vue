@@ -17,9 +17,8 @@ router.beforeEach((to, from, next) => {
   current_page.value = <string>to.name
   next();
 })
-// let cRoute = computed(() => {
-//   return router.currentRoute.value.fullPath;
-// });
+
+
 onMounted(() => {
   current_page.value = <string>route.name;
 })
@@ -30,41 +29,41 @@ onMounted(() => {
   <div class="dcq">
     <el-container>
       <el-aside width="14vw" style="padding: 14px 0">
-        <el-card shadow="always" class="nav_card">
 
-          <div class="nav_left">
-            <div class="logo">
-              <div>L S</div>
-              <div>LoveStory</div>
-            </div>
-            <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
-              <home theme="outline" size="30" fill="#000000"/>
-              <span class="select">首页</span>
-            </div>
-            <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">
-              <timeline theme="outline" size="30" fill="#000000"/>
-              <span class="select">时间线</span>
-            </div>
-            <div class="nav_item" @click="toLink('/chat')" :class="{is_active:current_page==='chat'}">
-              <communication theme="outline" size="30" fill="#000000"/>
-              <span class="select">聊天</span>
-            </div>
-            <div class="nav_item" @click="toLink('/setting')" :class="{is_active:current_page==='chat'}">
-              <setting-one theme="outline" size="30" fill="#000000"/>
-              <span class="select">设置</span>
-            </div>
+        <div class="nav_left">
+          <div class="logo">
+            <img src="/src/assets/logo2.svg" alt=""/>
           </div>
-        </el-card>
+          <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
+            <home theme="outline" size="30" fill="#000000"/>
+            <span class="select">首页</span>
+          </div>
+          <div class="nav_item" @click="toLink('/timeline')" :class="{is_active:current_page==='timeline'}">
+            <timeline theme="outline" size="30" fill="#000000"/>
+            <span class="select">时间线</span>
+          </div>
+          <div class="nav_item" @click="toLink('/chat')" :class="{is_active:current_page==='chat'}">
+            <communication theme="outline" size="30" fill="#000000"/>
+            <span class="select">聊天</span>
+          </div>
+          <div class="nav_item" @click="toLink('/setting')" :class="{is_active:current_page==='setting'}">
+            <setting-one theme="outline" size="30" fill="#000000"/>
+            <span class="select">设置</span>
+          </div>
+        </div>
       </el-aside>
       <el-container>
         <el-header style="height: 70px">
           <Header></Header>
         </el-header>
-        <el-main style="height: calc(100vh - 70px)">
-          <el-scrollbar style="height: 100%">
-            <RouterView/>
-          </el-scrollbar>
-        </el-main>
+        <transition name="el-zoom-in-center">
+          <el-main style="height: calc(100vh - 70px)">
+            <el-scrollbar style="height: 100%">
+              <RouterView/>
+            </el-scrollbar>
+          </el-main>
+        </transition>
+
       </el-container>
     </el-container>
   </div>
@@ -128,11 +127,11 @@ onMounted(() => {
 }
 
 .is_active {
-  background: #f7f7f7;
+  background: #dedede;
 }
 
 .nav_item:hover {
-  background: #f7f7f7;
+  background: #dedede;
 }
 
 .nav_item {
@@ -154,8 +153,16 @@ onMounted(() => {
 }
 
 @media (max-width: 700px) {
-  .nav_card {
+  .el-aside {
     display: none;
+  }
+
+  .dcq {
+    width: 100vw;
+  }
+
+  .el-main {
+    padding: 0;
   }
 
 

@@ -21,7 +21,7 @@ onMounted(() => {
   <div class="nav-bg">
     <div class="nav-bar">
       <div class="current_title">
-        <hamburger-button theme="outline" size="32" fill="#8d8d8d"/>
+<!--        <hamburger-button theme="outline" size="32" fill="#8d8d8d"/>-->
         <div>{{ current_name }}</div>
       </div>
       <div class="user">

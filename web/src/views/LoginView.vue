@@ -1,23 +1,29 @@
 <script setup lang="ts">
-import {ref, reactive} from 'vue';
+import {ref, reactive, watch} from 'vue';
 import type {FormInstance, FormRules} from 'element-plus'
-import axios from 'axios'
+import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
 
-const bg = [
-  "/src/assets/images/download/共同协同.png",
-  "/src/assets/images/download/发散创意.png",
-  "/src/assets/images/download/快速入门.png",
-  "/src/assets/images/download/成功秘籍.png",
-  "/src/assets/images/download/数据分析.png",
-  "/src/assets/images/download/数据报表.png",
-]
+import service from "@/http";
+import {getCookie, setCookie} from "@/util";
+import {userInfoStore} from "@/stores/userInfo";
+
+const userInfo = userInfoStore();
+
+const login_loading = ref(false);
+const router = useRouter();
 const ruleFormRef = ref<FormInstance>()
+const tips_is_active = ref({
+  email_address: false,
+  password: false,
+})
 
 const validateUsername = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('请输入账号'))
-  } else {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (regex.test(value)) {
     callback()
+  } else {
+    callback(new Error('请输入正确的邮箱账号'))
   }
 }
 const validatePassword = (rule: any, value: any, callback: any) => {
@@ -29,14 +35,33 @@ const validatePassword = (rule: any, value: any, callback: any) => {
 }
 
 const ruleForm = reactive({
-  username: '',
+  email_address: '',
   password: '',
 })
 
 const rules = reactive<FormRules<typeof ruleForm>>({
-  username: [{validator: validateUsername, trigger: 'blur'}],
+  email_address: [{validator: validateUsername, trigger: 'blur'}],
   password: [{validator: validatePassword, trigger: 'blur'}],
 })
+
+const login = async () => {
+  login_loading.value = true
+  await service.post('/api/user/login', ruleForm,).then(res => {
+    console.log(res)
+    if (res.data.code !== "2000") {
+      ElMessage.error(res.data.msg)
+    } else {
+      console.log(res.data)
+      setCookie("token", res.data.data.token)
+      userInfo.setUserinfo(res.data.data)
+      console.log(userInfo.userInfo)
+      router.push('/')
+    }
+  }).catch(e => {
+    ElMessage.error("系统异常")
+  })
+  login_loading.value = false
+}
 
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -44,6 +69,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     console.log(valid)
     if (valid) {
       console.log('submit!')
+      login()
     } else {
       console.log('error submit!')
       return false
@@ -51,57 +77,59 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 
-// const date = new Date();
-// date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-// const expires = `expires=${date.toUTCString()}`;
-// console.log(expires)
-// document.cookie = `token=123;${expires};path=/`;
+const tips_active_focus = (select: string) => {
+  tips_is_active.value[select] = true
 
-axios.get("/").then((res) => {
-  console.log(res)
-})
+}
+
+const tips_active_blur = (select: string) => {
+  if (ruleForm.email_address === "") {
+    tips_is_active.value.email_address = false
+  }
+  if (ruleForm.password === "") {
+    tips_is_active.value.password = false
+  }
+
+}
+
 
 console.log(import.meta.env)
 
 </script>
 
 <template>
-  <div class="LoginView">
-    <div class="login_left">
-      <div class="logo">LS</div>
-      <div class="carousel">
-        <el-carousel height="600px" motion-blur>
-          <el-carousel-item v-for="item in bg" :key="item">
-            <el-image :src="item"></el-image>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-    </div>
-    <div class="login_right">
-      <div class="logo">LS</div>
-      <div class="login_form">
-        <el-card style="width: 500px">
-          <div class="title">Love Story</div>
-          <el-form
-              ref="ruleFormRef"
-              status-icon
-              :rules="rules"
-              size="large"
-              :model="ruleForm"
-              label-width="auto"
-              style="max-width: 600px">
-            <el-form-item prop="username">
-              <el-input v-model="ruleForm.username" placeholder="账号"/>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input type="password" v-model="ruleForm.password" show-password placeholder="密码"/>
-            </el-form-item>
-            <el-form-item>
-              <el-button style="width: 100%" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-
+  <div class="LoginView" v-loading.fullscreen.lock="login_loading">
+    <img class="bg" src="/src/assets/bg.svg"/>
+    <div class="login_form">
+      <div class="login_card">
+        <div class="title">
+          <el-image style="height: 40px" src="/src/assets/logo2.svg"/>
+        </div>
+        <el-form
+            ref="ruleFormRef"
+            status-icon
+            :rules="rules"
+            size="large"
+            :model="ruleForm"
+            label-width="auto">
+          <el-form-item prop="email_address">
+            <label class="tips" :class="{'tips_active':tips_is_active['email_address']}">邮&nbsp;箱</label>
+            <el-input size="large" @focus="tips_active_focus('email_address')" class="email_input"
+                      v-model="ruleForm.email_address"
+                      placeholder=""
+                      @blur="tips_active_blur('email_address')"/>
+          </el-form-item>
+          <el-form-item prop="password">
+            <label class="tips" :class="{'tips_active':tips_is_active['password']}">密&nbsp;码</label>
+            <el-input size="large" @focus="tips_active_focus('password')" class="password_input" type="password"
+                      v-model="ruleForm.password" show-password
+                      placeholder=""
+                      @blur="tips_active_blur('password')"/>
+          </el-form-item>
+          <el-form-item>
+            <el-button style="width: 100%" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
   </div>
@@ -109,45 +137,34 @@ console.log(import.meta.env)
 </template>
 
 <style scoped>
-.logo {
+.login_form {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
   position: fixed;
-  left: 20px;
-  top: 20px;
-  border: 4px solid #f19dff;
-  border-radius: 10px;
-  font-size: 26px;
-  padding: 0 9px;
+}
+
+.bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login_card {
+  background: white;
+  padding: 44px 24px;
+  border-radius: 40px;
 }
 
 .LoginView {
   width: 100%;
   height: 100vh;
   display: flex;
-}
-
-.LoginView > div {
-  width: 100%;
-}
-
-.login_left {
-  background: #e6e6fa;
-}
-
-.login_right {
-  background: white;
-}
-
-
-.carousel, .login_form {
-  height: 100%;
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.el-carousel {
-  width: 90%;
-}
 
 .title {
   text-align: center;
@@ -155,13 +172,52 @@ console.log(import.meta.env)
   font-size: 40px;
 }
 
-@media (max-width: 1000px) {
-  .login_left {
-    display: none;
-  }
+.tips {
+  position: relative;
+  bottom: -28px;
+  z-index: 2;
+  left: 10px;
+  background: white;
+  font-size: 20px;
+  padding: 0 4px;
+  line-height: 20px;
+  animation: tips_close_an 0.15s ease-in-out forwards;
+}
 
-  .login_right {
-    background: #e6e6fa;
+.tips_active {
+  bottom: -9px;
+  animation: tips_an 0.15s ease-in-out forwards;
+}
+
+@keyframes tips_close_an {
+  from {
+    bottom: -9px;
+    font-size: 16px;
+  }
+  to {
+    bottom: -28px;
   }
 }
+
+@keyframes tips_an {
+  from {
+    bottom: -28px;
+  }
+  to {
+    bottom: -9px;
+    font-size: 16px;
+  }
+}
+
+
+.email_input:active::after {
+  top: -13px
+}
+
+@media (max-width: 700px) {
+  .login_form {
+    width: 90%;
+  }
+}
+
 </style>

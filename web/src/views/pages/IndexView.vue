@@ -2,13 +2,12 @@
 import {onBeforeMount, type Ref, ref} from "vue";
 import {useRouter} from "vue-router";
 import {ErrorPicture, CloseOne} from '@icon-park/vue-next'
+import service from "@/http";
+import {getCookie} from "@/util";
 
 const router = useRouter()
 const current_data = ref()
 const show_dialog = ref(false)
-const clientWidth = ref(0)
-const col = ref(5)
-const start_idx_end = ref(4)
 
 interface img_list {
   src: string
@@ -99,36 +98,7 @@ const img_list = ref<img_list[]>([
     'desc': 'Anime 3360x1440 Honkai: Star Rail artwork Sparkle (Honkai: Star Rail) anime anime girls brunette red eyes white stockings kimono goldfish twintails Asian architecture lantern hair blowing in the wind void_0',
     'h': 4
   }])
-const show_img_list = ref([
-  [],
-  [],
-  [],
-  [],
-  [],
-])
 
-const compute_img = () => {
-  console.log(show_img_list.value)
-  let start_idx = 0
-  for (let i = 1; i < col.value; i++) {
-    if (show_img_list.value[i] < show_img_list.value[i + 1]) {
-      start_idx = i
-    }
-  }
-  while (img_list.value.length > 0) {
-    console.log(img_list.value)
-    show_img_list.value[start_idx].push(img_list.value[0])
-    if (start_idx === start_idx_end.value) {
-      start_idx = 0
-    } else {
-      start_idx++
-    }
-    img_list.value.shift()
-  }
-  console.log(show_img_list.value.length)
-  console.log(show_img_list.value)
-}
-compute_img()
 
 const preview = (data: any) => {
   console.log(data)
@@ -142,44 +112,41 @@ const preview = (data: any) => {
 }
 
 onBeforeMount(() => {
-  clientWidth.value = document.body.clientWidth
-  if (clientWidth.value < 1000) {
-    col.value = 2
-    start_idx_end.value = 1
-  }
+  service.post('/api/images/home_data').then(res => {
+    console.log(res.data)
+  })
+  getCookie("123")
+
 })
 
 
 </script>
 
 <template>
-    <div class="img_list">
-      <div class="item-col" v-for="item in show_img_list" :key="item">
-        <el-card class="item" v-for="img in item" :key="img" @click="preview(img)">
-          <el-image fit="cover" style="width: 100%" :style="{height:`${img.height}00px`}"
-                    :src="img.src" lazy>
-            <template #placeholder>
-              <el-skeleton animated style="width: 100%">
-                <template #template>
-                  <el-skeleton-item variant="image" style="width: 100%; height: 240px"/>
-                </template>
-              </el-skeleton>
+  <div class="img_list">
+    <el-card class="item" v-for="img in img_list" :key="img" @click="preview(img)">
+      <el-image fit="cover" style="width: 100%;height: 70%" :src="img.src" lazy>
+        <template #placeholder>
+          <el-skeleton animated style="width: 100%; height: 100%">
+            <template #template>
+              <el-skeleton-item variant="image" style="width: 100%;height: 100%"/>
             </template>
-            <template #error>
-              <div class="image-slot">
-                <error-picture theme="outline" size="36" fill="#888888"/>
-              </div>
-            </template>
-          </el-image>
-          <div class="desc">
-            <div class="desc_text">
-              {{ img.desc }}
-            </div>
+          </el-skeleton>
+        </template>
+        <template #error>
+          <div class="image-slot" style="height: 100%">
+            <error-picture theme="outline" size="36" fill="#888888"/>
           </div>
-        </el-card>
+        </template>
+      </el-image>
+      <div class="desc">
+        <div class="desc_text">
+          {{ img.desc }}
+        </div>
       </div>
+    </el-card>
+  </div>
 
-    </div>
   <el-dialog
       v-model="show_dialog"
       width="900"
@@ -213,7 +180,8 @@ onBeforeMount(() => {
 }
 
 .item {
-  min-height: 400px;
+  height: 400px;
+  width: 230px;
 }
 
 .item-col {
@@ -226,6 +194,7 @@ onBeforeMount(() => {
 :deep(.el-card__body) {
   padding: 0;
   width: 100%;
+  height: 100%;
 }
 
 :deep(.el-image) {
@@ -257,9 +226,6 @@ onBeforeMount(() => {
 
 .desc_text::after {
   content: "...";
-  position: absolute;
-  bottom: 0;
-  right: 0;
   padding-left: 4px; /* 根据需要调整省略号与文本之间的间距 */
   background-color: white;
 }
@@ -274,12 +240,12 @@ onBeforeMount(() => {
 }
 
 @media (max-width: 500px) {
-  .img_list {
-    gap: 0;
-  }
-
   .item-col {
     width: calc(100vw / 2 - 10px);
+  }
+
+  .item {
+    width: 48%;
   }
 }
 

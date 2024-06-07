@@ -37,10 +37,17 @@ const router = createRouter({
                     },
                     component: () => import("@/views/pages/ChatView.vue")
                 }, {
-                    path: '/userinfo',
+                    path: 'userinfo',
                     name: 'userinfo',
                     meta: {
                         cn_name: "用户信息",
+                    },
+                    component: () => import('../views/pages/UserInfoView.vue')
+                }, {
+                    path: 'setting',
+                    name: 'setting',
+                    meta: {
+                        cn_name: "设置",
                     },
                     component: () => import('../views/pages/UserInfoView.vue')
                 }
