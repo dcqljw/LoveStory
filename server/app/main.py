@@ -1,8 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from databases.ConnectMysql import engine, Base
 from api.api_router import api_router
 from CustomException import registerException
 

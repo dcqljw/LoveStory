@@ -2,16 +2,6 @@ from fastapi import APIRouter, Depends, Cookie
 from fastapi.responses import StreamingResponse
 from typing import Annotated
 from PIL import Image
-from io import BytesIO
-from sqlalchemy.orm import Session
-from datetime import timedelta
-from schemas.UserSchema import LoginSchema, RegisterFromSchema, RegisterSchema
-from crud import UserCrud
-from databases.ConnectMysql import get_mysql_db
-# from databases.ConnectRedis import redis_client
-from core.security import get_password_hash, verify_password, create_access_token, verify_access_token
-from core.uid import idGenerator
-from config.SETTINGS import REDIS_EXPIRE
 
 router = APIRouter(prefix="/images", tags=["user"])
 
