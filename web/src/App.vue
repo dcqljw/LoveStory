@@ -1,18 +1,12 @@
 <script setup lang="ts">
-import {RouterLink, RouterView, useRouter} from 'vue-router'
-import {onBeforeMount, onMounted} from "vue";
-import {getCookie} from "@/util";
-import service from "@/http";
-import {userInfoStore} from "@/stores/userInfo";
-
-const useInfo = userInfoStore();
+import {RouterView, useRouter} from 'vue-router'
+import {onMounted} from "vue";
 
 const router = useRouter();
 router.beforeEach((to, from, next) => {
   document.title = `${<string>to.name} - LoveStory`
   next();
 })
-
 
 
 onMounted(() => {

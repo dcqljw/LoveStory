@@ -4,7 +4,7 @@ import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router"
 
 const router = useRouter();
-const current_name = ref("首页")
+const current_name = ref<string>("首页")
 
 router.beforeEach((to, from, next) => {
   current_name.value = to.meta.cn_name

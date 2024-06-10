@@ -13,7 +13,7 @@ const userInfo = userInfoStore();
 const login_loading = ref(false);
 const router = useRouter();
 const ruleFormRef = ref<FormInstance>()
-const tips_is_active = ref({
+const tips_is_active = ref<{ email_address: boolean, password: boolean }>({
   email_address: false,
   password: false,
 })
@@ -79,7 +79,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 const tips_active_focus = (select: string) => {
   tips_is_active.value[select] = true
-
 }
 
 const tips_active_blur = (select: string) => {
