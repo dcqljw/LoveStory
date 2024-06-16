@@ -94,6 +94,14 @@ const tips_active_blur = (select: string) => {
 
 console.log(import.meta.env)
 
+const imglist = [
+  '/images/gt.png',
+  '/images/fs.png',
+
+]
+
+const imgurl = new URL(imglist[0], import.meta.url).href
+
 </script>
 
 <template>
@@ -102,7 +110,7 @@ console.log(import.meta.env)
     <div class="login_form">
       <div class="login_card">
         <div class="title">
-          <el-image style="height: 40px" src="/src/assets/logo2.svg"/>
+          <el-image style="height: 40px" src="/images/gt.png"/>
         </div>
         <el-form
             ref="ruleFormRef"

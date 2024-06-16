@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import {ref} from 'vue'
 import {useRouter} from "vue-router";
 
 const router = useRouter();
+
+const image = ref('src/assets/bg.svg')
 
 </script>
 
@@ -241,6 +244,8 @@ const router = useRouter();
           d="M299.47 248.59c-6.09 0-12 0-18.35-.08-6.62 0-13.46-.09-20.8-.09-9.69 0-12.73-4.63-12.73-13 0-.72.05-13.18.05-13.18.39 4.05 3.06 10.15 11.14 13.18 9.18 3.44 60.11 13.15 60.11 13.15-2.8.01-16.66.02-19.42.02Z"
           fill="#3370FF"/>
     </svg>
+    <div class="t" :style="'background: url(' +image+ ')'">
+    </div>
     <div class="goHome">
       <el-link type="danger" @click="router.push('/')" :underline="false">返回主页</el-link>
     </div>
@@ -249,6 +254,11 @@ const router = useRouter();
 </template>
 
 <style scoped>
+.t {
+  height: 400px;
+  width: 400px;
+}
+
 .notFound {
   display: flex;
   justify-content: center;
