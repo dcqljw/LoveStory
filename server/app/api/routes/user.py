@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -66,3 +68,8 @@ def get_user_info(db: Session = Depends(get_mysql_db), jwt=Depends(verify_access
 @router.post("/verify_token")
 def verify_token():
     return {"code": "2000", "msg": "ok"}
+
+
+@router.get("/env")
+def get_env():
+    return {"env": os.getenv("fast_env")}

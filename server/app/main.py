@@ -1,10 +1,13 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.api_router import api_router
 from CustomException import registerException
+from databases.ConnectMysql import Base, engine
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 registerException.registerException(app)
 # Base.metadata.create_all(engine)
@@ -30,4 +33,5 @@ app.add_middleware(
 app.include_router(api_router)
 
 if __name__ == '__main__':
+    print(os.getenv("fast_env"))
     uvicorn.run(app, host="0.0.0.0")
