@@ -1,10 +1,11 @@
 import os
-
+import requests
 from fastapi import APIRouter, Depends
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
-from schemas.UserSchema import LoginSchema, RegisterFromSchema, RegisterSchema, UserInfoSchema
+from schemas.UserSchema import LoginSchema, RegisterFromSchema, RegisterSchema, UserInfoSchema, OAuthUserSchema
 from crud import UserCrud
 from databases.ConnectMysql import get_mysql_db
 from databases.ConnectRedis import redis_client
@@ -73,3 +74,45 @@ def verify_token():
 @router.get("/env")
 def get_env():
     return {"env": os.getenv("fast_env")}
+
+
+@router.get("/auth/github/callback")
+def github_callback(code: str, db: Session = Depends(get_mysql_db)):
+    print(code)
+    headers = {
+        'Accept': 'application/json',
+    }
+    url = f"https://github.com/login/oauth/access_token?client_id=Ov23li5BelebTemvlHgp&client_secret=d32e48dbba9da2002ef5895dc1cb409eb18e8c19&code={code}"
+    response = requests.get(url, headers=headers).json()
+    user_url = "https://api.github.com/user"
+    print(response)
+    headers = {
+        "Authorization": f"Bearer {response['access_token']}"
+    }
+    user_info = requests.get(user_url, headers=headers).json()
+    oauth_schema = OAuthUserSchema(
+        username=user_info["login"],
+        platform="github",
+        email_address=user_info["bio"],
+        avatar_url=user_info["avatar_url"])
+    is_bind = UserCrud.is_bind_oauth_user(db, username=oauth_schema.username, platform=oauth_schema.platform)
+    if is_bind:
+        token = create_access_token(is_bind.user_id, expires_delta=timedelta(days=1))
+        redis_client.setex(is_bind.user_id, REDIS_EXPIRE, token)
+        return {
+            "code": "2000",
+            "msg": "登录成功",
+            "data": {
+                "uid": is_bind.user_id,
+                "username": is_bind.username,
+                "email_address": is_bind.email_address,
+                "token": token,
+                "avatar_url": user_info["avatar_url"]
+            }
+        }
+    else:
+        UserCrud.register_oauth_user(db, oauth_schema)
+        return {
+            "code": "2001",
+            "msg": "账号密码错误"
+        }

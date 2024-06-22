@@ -21,15 +21,15 @@ def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     return encoded_jwt
 
 
-def verify_access_token(header_token: Annotated[str | None, Header()] = None,
+def verify_access_token(Authorization: Annotated[str | None, Header()] = None,
                         cookie_token: Annotated[str | None, Header()] = None):
-    if (header_token != "" or header_token is not None) and (cookie_token != "" or cookie_token is not None):
+    if (Authorization != "" or Authorization is not None) and (cookie_token != "" or cookie_token is not None):
         try:
-            decoded_token = jwt.decode(header_token, "123", algorithms=[ALGORITHM])
+            decoded_token = jwt.decode(Authorization, "123", algorithms=[ALGORITHM])
             token = redis_client.get(decoded_token["sub"])
             if token is None:
                 raise CustomTokenException("token is invalid")
-            if bytes.decode(token) == header_token:
+            if bytes.decode(token) == Authorization:
                 return decoded_token["sub"]
             else:
                 raise CustomTokenException("token is invalid")

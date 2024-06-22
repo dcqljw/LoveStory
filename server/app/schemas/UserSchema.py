@@ -23,4 +23,12 @@ class RegisterFromSchema(UserBase):
 
 
 class UserInfoSchema(UserBase):
-    pass
+    uid: str
+    avatar_url: str
+
+
+class OAuthUserSchema(BaseModel):
+    username: str
+    platform: str
+    email_address: EmailStr
+    avatar_url: str

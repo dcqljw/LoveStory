@@ -10,17 +10,17 @@ from databases.ConnectMysql import Base, engine
 app = FastAPI(root_path="/api")
 
 registerException.registerException(app)
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
-
-# origins = [
-#     "http://localhost:5173",
-#     "http://dcqljw.com",
-#     "http://localhost:8000"
-# ]
 origins = [
-    "*"
+    "http://localhost:5173",
+    "http://dcqljw.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:5173"
 ]
+# origins = [
+#     "*"
+# ]
 
 app.add_middleware(
     CORSMiddleware,
