@@ -2,7 +2,7 @@
 import {onBeforeMount, type Ref, ref} from "vue";
 import {useRouter} from "vue-router";
 import {ErrorPicture, CloseOne} from '@icon-park/vue-next'
-import service from "@/http";
+import service from "@/utils/request";
 import {getCookie} from "@/util";
 
 const router = useRouter()

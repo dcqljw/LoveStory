@@ -60,16 +60,12 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: () => import('../views/LoginView.vue')
-        }, {
-            path: "/:pathMatch(.*)*",
-            name: "NotFound",
-            component: () => import('../views/404.vue')
         },
-        {
-            path: "/404",
-            name: "NotFound",
-            component: () => import('../views/404.vue')
-        }
+        // {
+        //     path: "/:pathMatch(.*)*",
+        //     name: "NotFound",
+        //     component: () => import('../views/404.vue')
+        // }
     ]
 })
 

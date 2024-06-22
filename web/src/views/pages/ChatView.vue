@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import {userInfoStore} from "@/stores/userInfo";
 
+const userInfo = userInfoStore();
 </script>
 
 <template>
-  <div>Chat</div>
+  <div>{{ userInfo.userInfo   }}</div>
 </template>
 
 <style scoped>

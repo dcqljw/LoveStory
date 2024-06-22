@@ -1,9 +1,8 @@
 import axios from "axios";
 import {userInfoStore} from "@/stores/userInfo";
-import {ElMessage} from "element-plus";
 import router from "@/router";
 
-const userInfo = userInfoStore();
+
 const service = axios.create({})
 
 service.defaults.withCredentials = true
@@ -16,6 +15,8 @@ if (import.meta.env.MODE === 'production') {
 // 请求拦截设置token
 service.interceptors.request.use(
     config => {
+        const userInfo = userInfoStore();
+        console.log(userInfo.userInfo)
         const token = userInfo.userInfo.token
         token && (config.headers.Authorization = token)
         return config
@@ -29,6 +30,10 @@ service.interceptors.response.use(
         if (response.status === 200) {
             if (response.data.code === "4001") {
                 console.log(response.data.msg)
+                let url = window.location.href
+                if (url.includes("login")){
+                    return Promise.resolve(response)
+                }
                 router.push("/login")
                 return Promise.resolve(response)
             }

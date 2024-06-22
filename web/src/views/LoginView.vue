@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import {ref, reactive, watch} from 'vue';
+import {ref, reactive, watch, onMounted} from 'vue';
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from "element-plus";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
+import {Github} from "@icon-park/vue-next";
+import {loginApi} from '@/api/userApi';
 
-import service from "@/http";
+import service from "@/utils/request";
 import {getCookie, setCookie} from "@/util";
 import {userInfoStore} from "@/stores/userInfo";
+import axios from "axios";
+import http from "@/utils/request";
 
 const userInfo = userInfoStore();
 
 const login_loading = ref(false);
 const router = useRouter();
+const route = useRoute();
 const ruleFormRef = ref<FormInstance>()
-const tips_is_active = ref<{ email_address: boolean, password: boolean }>({
+const tips_is_active = reactive<{ email_address: boolean, password: boolean }>({
   email_address: false,
   password: false,
 })
@@ -46,7 +51,8 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 
 const login = async () => {
   login_loading.value = true
-  await service.post('/api/user/login', ruleForm,).then(res => {
+  await loginApi(ruleForm.email_address, ruleForm.password).then(res => {
+    // await service.post('/api/user/login', ruleForm,).then(res => {
     console.log(res)
     if (res.data.code !== "2000") {
       ElMessage.error(res.data.msg)
@@ -78,15 +84,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 
 const tips_active_focus = (select: string) => {
-  tips_is_active.value[select] = true
+  tips_is_active[select] = true
 }
 
 const tips_active_blur = (select: string) => {
   if (ruleForm.email_address === "") {
-    tips_is_active.value.email_address = false
+    tips_is_active.email_address = false
   }
   if (ruleForm.password === "") {
-    tips_is_active.value.password = false
+    tips_is_active.password = false
   }
 
 }
@@ -94,13 +100,30 @@ const tips_active_blur = (select: string) => {
 
 console.log(import.meta.env)
 
-const imglist = [
-  '/images/gt.png',
-  '/images/fs.png',
+const github_login = () => {
+  const url = "https://github.com/login/oauth/authorize?client_id=Ov23li5BelebTemvlHgp&redirect_uri=http://127.0.0.1:5173/login"
+  window.location.href = url
+}
+const github_callback = async (code: any) => {
+  await http.get(`/user/auth/github/callback?code=${code}`).then(res => {
+    if (res.data.code !== "2000") {
+      ElMessage.error(res.data.msg)
+    } else {
+      console.log(res.data)
+      setCookie("token", res.data.data.token)
+      userInfo.setUserinfo(res.data.data)
+      console.log(userInfo.userInfo)
+      router.push('/')
+    }
+  })
+}
 
-]
-
-const imgurl = new URL(imglist[0], import.meta.url).href
+onMounted(() => {
+  const code = route.query.code
+  if (code) {
+    github_callback(code)
+  }
+})
 
 </script>
 
@@ -110,15 +133,14 @@ const imgurl = new URL(imglist[0], import.meta.url).href
     <div class="login_form">
       <div class="login_card">
         <div class="title">
-          <el-image style="height: 40px" src="/images/gt.png"/>
+          <el-image style="height: 40px" src="/images/logo2.svg"/>
         </div>
         <el-form
             ref="ruleFormRef"
             status-icon
             :rules="rules"
             size="large"
-            :model="ruleForm"
-            label-width="auto">
+            :model="ruleForm">
           <el-form-item prop="email_address">
             <label class="tips" :class="{'tips_active':tips_is_active['email_address']}">邮&nbsp;箱</label>
             <el-input size="large" @focus="tips_active_focus('email_address')" class="email_input"
@@ -137,6 +159,14 @@ const imgurl = new URL(imglist[0], import.meta.url).href
             <el-button style="width: 100%" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
           </el-form-item>
         </el-form>
+        <el-divider>其他登录方式</el-divider>
+        <div class="oauth">
+          <div @click="github_login">
+            <!--            <a href="https://github.com/login/oauth/authorize?client_id=Ov23li5BelebTemvlHgp&redirect_uri=http://127.0.0.1:8000/api/user/auth/github/callback">-->
+            <github theme="outline" size="32" fill="#000000"/>
+            <!--            </a>-->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -227,4 +257,8 @@ const imgurl = new URL(imglist[0], import.meta.url).href
   }
 }
 
+.oauth {
+  display: flex;
+  justify-content: center;
+}
 </style>

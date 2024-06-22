@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Header from "@/components/Header.vue";
 import {Home, Timeline, Communication, User, SettingOne} from '@icon-park/vue-next'
-
 import {useRouter, useRoute} from "vue-router";
 import {onMounted, ref, computed} from "vue";
+import http from "@/utils/request";
 
 const router = useRouter();
 const route = useRoute();
@@ -21,6 +21,7 @@ router.beforeEach((to, from, next) => {
 
 onMounted(() => {
   current_page.value = <string>route.name;
+
 })
 
 </script>
@@ -32,7 +33,7 @@ onMounted(() => {
 
         <div class="nav_left">
           <div class="logo">
-            <img src="/src/assets/logo2.svg" alt=""/>
+            <img src="/images/logo2.svg" alt=""/>
           </div>
           <div class="nav_item" @click="toLink('/')" :class="{is_active:current_page==='index'}">
             <home theme="outline" size="30" fill="#000000"/>

@@ -4,6 +4,7 @@ interface UserInfo {
     uid: string
     username: string
     token: string
+    avatar_url: string
 }
 
 export const userInfoStore = defineStore("userInfo", {
