@@ -43,9 +43,9 @@ onMounted(() => {
             <timeline theme="outline" size="30" fill="#000000"/>
             <span class="select">时间线</span>
           </div>
-          <div class="nav_item" @click="toLink('/chat')" :class="{is_active:current_page==='chat'}">
+          <div class="nav_item" @click="toLink('/plan')" :class="{is_active:current_page==='chat'}">
             <communication theme="outline" size="30" fill="#000000"/>
-            <span class="select">聊天</span>
+            <span class="select">计划</span>
           </div>
           <div class="nav_item" @click="toLink('/setting')" :class="{is_active:current_page==='setting'}">
             <setting-one theme="outline" size="30" fill="#000000"/>

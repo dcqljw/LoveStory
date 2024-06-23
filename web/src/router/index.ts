@@ -30,12 +30,12 @@ const router = createRouter({
                     },
                     component: () => import("@/views/pages/TimeLineView.vue")
                 }, {
-                    path: "chat",
-                    name: "chat",
+                    path: "plan",
+                    name: "plan",
                     meta: {
-                        cn_name: "聊天",
+                        cn_name: "计划",
                     },
-                    component: () => import("@/views/pages/ChatView.vue")
+                    component: () => import("@/views/pages/PlanVIew.vue")
                 }, {
                     path: 'userinfo',
                     name: 'userinfo',
