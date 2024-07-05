@@ -57,6 +57,18 @@ const router = createRouter({
             name: 'upload',
             component: () => import('../views/pages/UploadView.vue')
         }, {
+            path: '/chat',
+            name: 'chat',
+            component: () => import('@/views/Chat/IndexView.vue'),
+            children: [
+                {
+                    path: ':chat_type',
+                    name: "聊天",
+                    component: () => import('@/views/Chat/ChatView.vue'),
+                }
+            ]
+        },
+        {
             path: '/login',
             name: 'login',
             component: () => import('../views/LoginView.vue')

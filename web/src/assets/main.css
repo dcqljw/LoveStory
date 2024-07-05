@@ -10,3 +10,13 @@ main {
         width: 100vw;
     }
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #063b5a27;
+    border-radius: 5px;
+}
