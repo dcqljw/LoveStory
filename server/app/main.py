@@ -9,8 +9,9 @@ from databases.ConnectMysql import Base, engine
 
 app = FastAPI(root_path="/api")
 
+# 注册自定义异常
 registerException.registerException(app)
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 origins = [
     "http://localhost:5173",
@@ -18,9 +19,6 @@ origins = [
     "http://localhost:8000",
     "http://127.0.0.1:5173"
 ]
-# origins = [
-#     "*"
-# ]
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +27,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+# 添加路由
 app.include_router(api_router)
 
 if __name__ == '__main__':
